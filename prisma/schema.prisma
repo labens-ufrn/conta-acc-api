@@ -9,3 +9,50 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Domain {
+  id String @id @default(cuid())
+
+  name String
+
+  users User[]
+
+  status    Status   @default(ACTIVE)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  metaData  Json?
+
+  @@map("courses")
+}
+
+model User {
+  id String @id @default(cuid())
+
+  name     String
+  email    String @unique
+  password String
+  role     Role   @default(USER)
+
+  status    Status   @default(ACTIVE)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  lastLogin DateTime @default(now())
+  metaData  Json?
+  domain    Domain?  @relation(fields: [domainId], references: [id])
+  domainId  String?
+
+  @@map("users")
+}
+
+enum Status {
+  ACTIVE
+  INACTIVE
+  DELETED
+}
+
+enum Role {
+  SYSADMIN
+  ADMIN
+  COORDINATOR
+  USER
+}
