@@ -1,0 +1,93 @@
+name: build-sdk
+on:
+  workflow_dispatch:
+  workflow_call:
+  push:
+    paths:
+      - ".sdk-spec/last-checksum.txt"
+      - ".sdk-spec/sdk-js/build-sdk.ts"
+      - ".sdk-spec/sdk-js/yarn.lock"
+      - ".sdk-spec/sdk-js/pomme.config.json"
+    branches:
+      - "main"
+env:
+  BOT_USER_NAME: ${{ secrets.BOT_USER_NAME }}
+  SDK_REPO: labens-ufrn/conta-acc-sdk-js
+  GH_PAT: ${{ secrets.GH_PAT }}
+  SDK_REPO_PATH: /tmp/labens-ufrn/conta-acc-sdk-js
+  SDK_REPO_URL: https://${{ secrets.GH_PAT }}:x-oauth-basic@github.com/labens-ufrn/conta-acc-sdk-js.git
+
+jobs:
+  build:
+    runs-on: "ubuntu-20.04"
+    steps:
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 10
+          persist-credentials: false
+
+      - name: Setup Git
+        run: |
+          GIT_BRANCH=${{ github.ref }}
+          echo "REPOSITORY_NAME=$(echo "$GITHUB_REPOSITORY" | awk -F / '{print $2}')" >> $GITHUB_ENV
+          echo "GIT_BRANCH=$(echo "${GIT_BRANCH/refs\/heads\//}")" >> $GITHUB_ENV
+          echo "COMMIT_DATE=$(git log -n 1 --pretty='format:%cd' --date=format:'%y-%m-%d')" >> $GITHUB_ENV
+          echo "COMMIT_TIME=$(git log -n 1 --pretty='format:%cd' --date=format:'%H-%M-%S')" >> $GITHUB_ENV
+          echo "CURRENT_DATETIME=$(date +'%Y-%m-%d %H:%M:%S')" >> $GITHUB_ENV
+          echo "GH_SHA_SHORT=$(echo $GITHUB_SHA | cut -c 1-7)" >> $GITHUB_ENV
+          # TODO: Replace the bot name bellow by the real github account name
+          git config --global user.name "$BOT_USER_NAME"
+          git config --global url."https://${{ env.GH_PAT }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
+          git config --global url."https://${{ env.GH_PAT }}:x-oauth-basic@github.com/".insteadOf "ssh://git@github.com/"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 19
+          cache: "yarn"
+          cache-dependency-path: ".sdk-spec/sdk-js/yarn.lock"
+
+      - name: Clone the remote sdk repo and create branch
+        run: |
+          mkdir -p $SDK_REPO_PATH
+          (git clone --depth 10 --branch ${{ env.GIT_BRANCH }} $SDK_REPO_URL $SDK_REPO_PATH) || (git clone --depth 10 --branch main $SDK_REPO_URL $SDK_REPO_PATH && git -C $SDK_REPO_PATH checkout -b ${{ env.GIT_BRANCH }})
+
+      - name: Build SDK
+        run: |
+          cd .sdk-spec/sdk-js
+          yarn --frozen-lockfile --silent
+          yarn build-sdk-js
+          ls -la
+          rm -rf $SDK_REPO_PATH/* && rm -rf node_modules && mv * $SDK_REPO_PATH
+          ls -la
+
+      - name: Commit and push changes
+        run: |
+          cd $SDK_REPO_PATH
+          git add -A
+          git status
+          (git commit -am $'chore: updates ${{ github.ref }} \n${{ env.GH_SHA_SHORT }}' && git tag $GIT_BRANCH-$COMMIT_DATE-$COMMIT_TIME-$GH_SHA_SHORT ) || true
+          git status
+
+      - name: Push changes to branch final
+        run: |
+          cd $SDK_REPO_PATH
+          if [ ! -d "dist" ]; then
+              echo "No dist folder found, exiting..."
+              exit 1
+          fi
+          git status
+          git pull --ff
+          git push -u --set-upstream origin ${{ env.GIT_BRANCH }} --tags
+          git status
+
+      - name: Job Summary
+        run: |
+          echo "SDK Tag: $GIT_BRANCH-$COMMIT_DATE-$COMMIT_TIME-$GH_SHA_SHORT" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- Branch: $GIT_BRANCH" >> $GITHUB_STEP_SUMMARY
+          echo "- Commit Date: $COMMIT_DATE" >> $GITHUB_STEP_SUMMARY
+          echo "- Commit Time: $COMMIT_TIME" >> $GITHUB_STEP_SUMMARY
+          echo "- Commit SHA: $GH_SHA_SHORT" >> $GITHUB_STEP_SUMMARY

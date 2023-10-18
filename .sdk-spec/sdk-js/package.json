@@ -1,0 +1,17 @@
+{
+  "name": "sdk-js",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "typings": "dist/index.d.ts",
+  "devDependencies": {
+    "pomme-sdk-builder": "^1.0.5",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  },
+  "scripts": {
+    "build-sdk-js": "ts-node build-sdk.ts --build"
+  },
+  "dependencies": {}
+}

@@ -1,0 +1,13 @@
+{
+  "default": {
+    "input": {
+      "targetUrl": "http://localhost:3061/pomme",
+      "axios": {
+        "baseUrl": "http://localhost:3061"
+      }
+    },
+    "output": {
+      "path": "./generated"
+    }
+  }
+}
