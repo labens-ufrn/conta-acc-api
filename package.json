@@ -1,0 +1,12 @@
+{
+  "name": "conta-acc-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:labens-ufrn/conta-acc-api.git",
+  "author": "Everton Fernande <evertonfrnds@gmail.com>",
+  "scripts": {
+    "dev": "tsx --watch ./src/index.ts",
+    "build-sdk-js": "cd .sdk-spec/sdk-js && yarn && yarn build-sdk-js"
+  },
+  "license": "MIT"
+}

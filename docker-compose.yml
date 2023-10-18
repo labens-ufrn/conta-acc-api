@@ -1,0 +1,19 @@
+version: "3"
+services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - 6379:6379
+    volumes:
+      - redis:/data
+
+  db:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: mysecretpassword
+
+volumes:
+  redis:
+  postgres:
