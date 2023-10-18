@@ -8,12 +8,12 @@ declare namespace Express {
     reqUserAgent?: string;
     requestId?: string;
     user?: any;
-    domain?: any;
+    course?: any;
     userId?: string;
-    domainId?: string;
+    courseId?: string;
     userJwtDecoded?: {
       id: string;
-      domainId: string;
+      courseId: string;
       createdAt: string;
       dataTime: string;
       deviceId?: string;

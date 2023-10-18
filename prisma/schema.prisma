@@ -10,7 +10,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Domain {
+model Course {
   id String @id @default(cuid())
 
   name String
@@ -38,8 +38,8 @@ model User {
   updatedAt DateTime @updatedAt
   lastLogin DateTime @default(now())
   metaData  Json?
-  domain    Domain?  @relation(fields: [domainId], references: [id])
-  domainId  String?
+  course    Course?  @relation(fields: [courseId], references: [id])
+  courseId  String?
 
   @@map("users")
 }
