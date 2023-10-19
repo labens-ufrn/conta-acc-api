@@ -2,7 +2,6 @@ import p from "pomme-ts";
 import { z } from "zod";
 import { userModel } from "../user/model-user";
 import { generateJwt } from "../user/helper-jwt";
-import { getInclude } from "@src/core/utils/helper-include";
 
 const bodySchema = z.object({
   email: z.string(),
@@ -29,7 +28,7 @@ export const v1SignIn = p.route.post({
       },
       ...(include && {
         include: {
-          domain: include.includes("domain"),
+          course: include.includes("course"),
         },
       }),
     });
@@ -55,7 +54,7 @@ export const v1SignIn = p.route.post({
 
     const token = generateJwt({
       id,
-      domainId: userExisted.domainId,
+      courseId: userExisted.courseId,
       createdAt,
       reqIpAddress,
       reqIpCountry,

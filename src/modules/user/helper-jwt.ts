@@ -4,7 +4,7 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 
 type GenerateJwtProps = {
   id: string;
-  domainId: string;
+  courseId: string;
   createdAt: string | Date;
   metadata?: Record<string | number, string | number>;
   expire?: string;
@@ -31,7 +31,7 @@ export interface DecodedJwt extends JwtPayload {
 export function generateJwt(props: GenerateJwtProps) {
   let {
     id,
-    domainId,
+    courseId,
     createdAt,
     metadata,
     expire,
@@ -57,7 +57,7 @@ export function generateJwt(props: GenerateJwtProps) {
     token = jwt.sign(
       {
         id: String(id),
-        domainId: String(domainId),
+        courseId: String(courseId),
         createdAt:
           createdAt instanceof Date ? createdAt.toISOString() : createdAt,
         dataTime: Date.now(),

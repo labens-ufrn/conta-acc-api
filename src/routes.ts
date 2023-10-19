@@ -8,19 +8,8 @@ import { httpContextMw } from "./core/middlewares/http-context-mw";
 import { healthRoutes } from "./modules/health/routes";
 import { userController } from "./modules/user/user-controller";
 import { managerController } from "./modules/manager/manager-controller";
-import { domainController } from "./modules/domain/domain-controller";
-import { cashFlowController } from "./modules/cash-flow/cash-flow-controller";
-import { clientsController } from "./modules/clients/clients-controller";
-import { todoController } from "./modules/todo/todo-controller";
 
-const controllers: Controller[] = [
-  domainController,
-  userController,
-  managerController,
-  cashFlowController,
-  clientsController,
-  todoController,
-];
+const controllers: Controller[] = [userController, managerController];
 
 export async function setRoutes(app: Express) {
   app.use("/", healthRoutes);

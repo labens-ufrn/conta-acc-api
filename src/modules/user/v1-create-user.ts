@@ -1,10 +1,10 @@
 import p from "pomme-ts";
 import { z } from "zod";
 import { userModel } from "./model-user";
-import { domainModel } from "../domain/model-domain";
+import { courseModel } from "../course/model-course";
 
 const bodySchema = z.object({
-  domainId: z.string(),
+  courseId: z.string(),
   name: z.string(),
   email: z.string().email(),
   password: z.string(),
@@ -15,15 +15,15 @@ export const v1CreateUser = p.route.post({
   key: "createUser",
   bodySchema,
   async resolver(input, ctx) {
-    const { name, email, password, role, domainId } = input.body;
+    const { name, email, password, role, courseId } = input.body;
 
-    const domainExists = await domainModel.count({
+    const courseExist = await courseModel.count({
       where: {
-        id: domainId,
+        id: courseId,
       },
     });
 
-    if (!domainExists) {
+    if (!courseExist) {
       throw new Error("Course not found");
     }
 
