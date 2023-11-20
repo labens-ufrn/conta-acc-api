@@ -13,9 +13,9 @@ datasource db {
 model Course {
   id String @id @default(cuid())
 
-  name String
-
-  users User[]
+  name    String
+  users   User[]
+  student Student[]
 
   status    Status   @default(ACTIVE)
   createdAt DateTime @default(now())
@@ -29,19 +29,39 @@ model User {
   id String @id @default(cuid())
 
   name     String
-  email    String @unique
-  password String
-  role     Role   @default(USER)
+  email    String  @unique
+  password String?
+  role     Role    @default(STUDENT)
 
   status    Status   @default(ACTIVE)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   lastLogin DateTime @default(now())
   metaData  Json?
-  course    Course?  @relation(fields: [courseId], references: [id])
-  courseId  String?
+
+  course   Course?  @relation(fields: [courseId], references: [id])
+  courseId String?
+  student  Student?
 
   @@map("users")
+}
+
+model Student {
+  id String @id @default(cuid())
+
+  enrollId String @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  metaData  Json?
+
+  user   User?  @relation(fields: [userId], references: [id])
+  userId String @unique
+
+  course   Course? @relation(fields: [courseId], references: [id])
+  courseId String?
+
+  @@map("students")
 }
 
 enum Status {
@@ -54,5 +74,5 @@ enum Role {
   SYSADMIN
   ADMIN
   COORDINATOR
-  USER
+  STUDENT
 }

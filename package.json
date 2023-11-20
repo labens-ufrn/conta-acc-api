@@ -31,7 +31,7 @@
     "express-http-context": "^1.2.4",
     "jsonwebtoken": "^9.0.2",
     "luxon": "^3.4.3",
-    "pomme-ts": "1.2.6",
+    "pomme-ts": "^1.2.9",
     "uuid": "^9.0.1",
     "zod": "^3.22.2"
   }
