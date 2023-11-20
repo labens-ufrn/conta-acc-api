@@ -4,7 +4,7 @@ const isDevelopment: boolean =
 const isProduction: boolean = nodeEnv === "production";
 const isTesting: boolean = nodeEnv === "test";
 
-const appName: string = process.env.APP_NAME ?? "conta-acc-api";
+export const appName: string = process.env.APP_NAME ?? "conta-acc-api";
 
 const development = {
   isTesting,
