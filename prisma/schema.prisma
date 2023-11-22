@@ -13,9 +13,9 @@ datasource db {
 model Course {
   id String @id @default(cuid())
 
-  name    String
-  users   User[]
-  student Student[]
+  name     String
+  users    User[]
+  students Student[]
 
   status    Status   @default(ACTIVE)
   createdAt DateTime @default(now())
