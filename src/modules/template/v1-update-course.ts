@@ -7,7 +7,7 @@ const bodySchema = z.object({
   name: z.string().optional(),
 });
 
-export const v1UpdateTemplate = p.route.post({
+export const v1UpdateTemplate = p.route.put({
   key: "updateTemplate",
   path: "/:id",
   bodySchema,

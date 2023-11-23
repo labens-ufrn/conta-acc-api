@@ -1,5 +1,5 @@
 {
-  "ceb4890b86cd08dca62b36feedc9ed9f": {
+  "77355ecb5d0ea9e7a373c5a639608a02": {
     "payload": [
       "<@key>createUser</@key><@req>POST</@req><@controller>user</@controller><@route>/user/</@route><@body>{\"type\":\"object\",\"properties\":{\"courseId\":{\"type\":\"string\"},\"name\":{\"type\":\"string\"},\"email\":{\"type\":\"string\",\"format\":\"email\"},\"password\":{\"type\":\"string\"},\"role\":{\"type\":\"string\"}},\"required\":[\"courseId\",\"name\",\"email\",\"password\",\"role\"],\"additionalProperties\":false,\"$schema\":\"http://json-schema.org/draft-07/schema#\"}</@body>",
       "<@key>listUsers</@key><@req>GET</@req><@controller>user</@controller><@route>/user/</@route><@query>{\"type\":\"object\",\"properties\":{\"include\":{\"type\":\"string\",\"enum\":[\"users\"]},\"search\":{\"type\":\"string\"},\"page\":{\"type\":\"number\",\"default\":1},\"pageSize\":{\"type\":\"number\",\"default\":10}},\"additionalProperties\":false,\"$schema\":\"http://json-schema.org/draft-07/schema#\"}</@query>",
@@ -7,8 +7,9 @@
       "<@key>signIn</@key><@req>POST</@req><@controller>manager</@controller><@route>/manager/sign-in</@route><@body>{\"type\":\"object\",\"properties\":{\"email\":{\"type\":\"string\"},\"password\":{\"type\":\"string\"}},\"required\":[\"email\",\"password\"],\"additionalProperties\":false,\"$schema\":\"http://json-schema.org/draft-07/schema#\"}</@body><@query>{\"type\":\"object\",\"properties\":{\"include\":{\"type\":\"string\"}},\"additionalProperties\":false,\"$schema\":\"http://json-schema.org/draft-07/schema#\"}</@query>",
       "<@key>signUp</@key><@req>POST</@req><@controller>manager</@controller><@route>/manager/student/sign-up</@route><@body>{\"type\":\"object\",\"properties\":{\"name\":{\"type\":\"string\"},\"enrollId\":{\"type\":\"string\"},\"email\":{\"type\":\"string\"},\"password\":{\"type\":\"string\"}},\"required\":[\"name\",\"enrollId\",\"email\",\"password\"],\"additionalProperties\":false,\"$schema\":\"http://json-schema.org/draft-07/schema#\"}</@body>",
       "<@key>listCourses</@key><@req>GET</@req><@controller>course</@controller><@route>/course/</@route><@query>{\"type\":\"object\",\"properties\":{\"include\":{\"type\":\"string\",\"enum\":[\"users\"]},\"search\":{\"type\":\"string\"},\"page\":{\"type\":\"number\",\"default\":1},\"pageSize\":{\"type\":\"number\",\"default\":10}},\"additionalProperties\":false,\"$schema\":\"http://json-schema.org/draft-07/schema#\"}</@query>",
-      "<@key>createCourse</@key><@req>POST</@req><@controller>course</@controller><@route>/course/</@route><@body>{\"type\":\"object\",\"properties\":{\"name\":{\"type\":\"string\"}},\"required\":[\"name\"],\"additionalProperties\":false,\"$schema\":\"http://json-schema.org/draft-07/schema#\"}</@body>"
+      "<@key>createCourse</@key><@req>POST</@req><@controller>course</@controller><@route>/course/</@route><@body>{\"type\":\"object\",\"properties\":{\"name\":{\"type\":\"string\"}},\"required\":[\"name\"],\"additionalProperties\":false,\"$schema\":\"http://json-schema.org/draft-07/schema#\"}</@body>",
+      "<@key>updateCourse</@key><@req>PUT</@req><@controller>course</@controller><@route>/course/:id</@route><@body>{\"type\":\"object\",\"properties\":{\"name\":{\"type\":\"string\"},\"status\":{\"type\":\"string\",\"enum\":[\"ACTIVE\",\"INACTIVE\"]}},\"additionalProperties\":false,\"$schema\":\"http://json-schema.org/draft-07/schema#\"}</@body>"
     ],
-    "createdAt": "2023-11-22T23:14:47.080Z"
+    "createdAt": "2023-11-23T13:20:15.770Z"
   }
 }
