@@ -5,7 +5,7 @@ import { getInclude } from "@src/core/utils/helper-include";
 import { courseModel } from "./model-course";
 
 const querySchema = z.object({
-  include: z.enum(["users"]).optional(),
+  include: z.string().optional(),
   search: z.string().optional(),
   page: z.number().default(1),
   pageSize: z.number().default(10),
@@ -31,9 +31,7 @@ export const v1ListTemplate = p.route.get({
     });
 
     const querySchema: Prisma. = {
-      ...(include && {
-        include: getInclude(include),
-      }),
+      ...(include && getInclude(include)),
       ...(search && {
         where: {
           OR: [

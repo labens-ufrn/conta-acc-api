@@ -31,9 +31,7 @@ export const v1ListUsers = p.route.get({
     });
 
     const query: Prisma.UserFindManyArgs = {
-      ...(include && {
-        include: getInclude(include),
-      }),
+      ...(include && getInclude(include)),
       ...(search && {
         where: {
           OR: [
