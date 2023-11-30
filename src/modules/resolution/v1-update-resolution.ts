@@ -40,8 +40,6 @@ export const v1UpdateResolution = p.route.put({
       },
     });
 
-    return {
-      resolution,
-    };
+    return resolution;
   },
 });
