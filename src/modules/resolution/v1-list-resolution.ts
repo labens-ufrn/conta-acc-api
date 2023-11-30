@@ -5,8 +5,10 @@ import { getInclude } from "@src/core/utils/helper-include";
 import { resolutionModel } from "./model-resolution";
 
 const querySchema = z.object({
-  include: z.string().optional(),
+  id: z.string().optional(),
+  isCurrent: z.boolean().optional(),
   search: z.string().optional(),
+  include: z.string().optional(),
   page: z.number().default(1),
   pageSize: z.number().default(10),
 });
@@ -15,42 +17,35 @@ export const v1ListResolution = p.route.get({
   key: "listResolution",
   querySchema,
   async resolver({ query }, ctx) {
-    const { include, page = 1, pageSize = 10, search } = query;
+    const { include, page = 1, pageSize = 10, id, isCurrent, search } = query;
 
     const offset = (page - 1) * pageSize;
 
     const total = await resolutionModel.count({
-      ...(search && {
-        where: {
+      where: {
+        id,
+        isCurrent,
+        ...(search && {
           name: {
             contains: search,
             mode: "insensitive",
           },
-        },
-      }),
+        }),
+      },
     });
 
     const querySchema: Prisma.ResolutionFindManyArgs = {
       ...(include && getInclude(include)),
-      // include: {
-      //   categories: {
-      //     include: {
-      //       activities: true,
-      //     },
-      //   },
-      // },
-      ...(search && {
-        where: {
-          OR: [
-            {
-              name: {
-                contains: search,
-                mode: "insensitive",
-              },
-            },
-          ],
-        },
-      }),
+      where: {
+        id,
+        isCurrent,
+        ...(search && {
+          name: {
+            contains: search,
+            mode: "insensitive",
+          },
+        }),
+      },
       skip: offset,
       take: pageSize,
     };
