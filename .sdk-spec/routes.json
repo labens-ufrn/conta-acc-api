@@ -1,5 +1,5 @@
 {
-  "bd9974212f26f3f4db52f2d7c61d4ee6": {
+  "ab03d1c9c62e1f12204efd33aa03e4a8": {
     "payload": [
       "<@key>createUser</@key><@req>POST</@req><@controller>user</@controller><@route>/user/</@route><@body>{\"type\":\"object\",\"properties\":{\"courseId\":{\"type\":\"string\"},\"name\":{\"type\":\"string\"},\"email\":{\"type\":\"string\",\"format\":\"email\"},\"password\":{\"type\":\"string\"},\"role\":{\"type\":\"string\"}},\"required\":[\"courseId\",\"name\",\"email\",\"password\",\"role\"],\"additionalProperties\":false,\"$schema\":\"http://json-schema.org/draft-07/schema#\"}</@body>",
       "<@key>listUsers</@key><@req>GET</@req><@controller>user</@controller><@route>/user/</@route><@query>{\"type\":\"object\",\"properties\":{\"include\":{\"type\":\"string\",\"enum\":[\"users\"]},\"search\":{\"type\":\"string\"},\"page\":{\"type\":\"number\",\"default\":1},\"pageSize\":{\"type\":\"number\",\"default\":10}},\"additionalProperties\":false,\"$schema\":\"http://json-schema.org/draft-07/schema#\"}</@query>",
@@ -10,8 +10,9 @@
       "<@key>createCourse</@key><@req>POST</@req><@controller>course</@controller><@route>/course/</@route><@body>{\"type\":\"object\",\"properties\":{\"name\":{\"type\":\"string\"}},\"required\":[\"name\"],\"additionalProperties\":false,\"$schema\":\"http://json-schema.org/draft-07/schema#\"}</@body>",
       "<@key>updateCourse</@key><@req>PUT</@req><@controller>course</@controller><@route>/course/:id</@route><@body>{\"type\":\"object\",\"properties\":{\"name\":{\"type\":\"string\"},\"status\":{\"type\":\"string\",\"enum\":[\"ACTIVE\",\"INACTIVE\"]}},\"additionalProperties\":false,\"$schema\":\"http://json-schema.org/draft-07/schema#\"}</@body>",
       "<@key>listResolution</@key><@req>GET</@req><@controller>resolution</@controller><@route>/resolution/</@route><@query>{\"type\":\"object\",\"properties\":{\"include\":{\"type\":\"string\"},\"search\":{\"type\":\"string\"},\"page\":{\"type\":\"number\",\"default\":1},\"pageSize\":{\"type\":\"number\",\"default\":10}},\"additionalProperties\":false,\"$schema\":\"http://json-schema.org/draft-07/schema#\"}</@query>",
-      "<@key>createResolution</@key><@req>POST</@req><@controller>resolution</@controller><@route>/resolution/</@route><@body>{\"type\":\"object\",\"properties\":{\"name\":{\"type\":\"string\"},\"description\":{\"type\":\"string\"},\"link\":{\"type\":\"string\"},\"courseId\":{\"type\":\"string\"}},\"required\":[\"name\",\"courseId\"],\"additionalProperties\":false,\"$schema\":\"http://json-schema.org/draft-07/schema#\"}</@body>"
+      "<@key>createResolution</@key><@req>POST</@req><@controller>resolution</@controller><@route>/resolution/</@route><@body>{\"type\":\"object\",\"properties\":{\"name\":{\"type\":\"string\"},\"description\":{\"type\":\"string\"},\"link\":{\"type\":\"string\"},\"courseId\":{\"type\":\"string\"}},\"required\":[\"name\",\"courseId\"],\"additionalProperties\":false,\"$schema\":\"http://json-schema.org/draft-07/schema#\"}</@body>",
+      "<@key>updateResolution</@key><@req>PUT</@req><@controller>resolution</@controller><@route>/resolution/:id</@route><@body>{\"type\":\"object\",\"properties\":{\"name\":{\"type\":\"string\"},\"description\":{\"type\":\"string\"},\"link\":{\"type\":\"string\"}},\"additionalProperties\":false,\"$schema\":\"http://json-schema.org/draft-07/schema#\"}</@body>"
     ],
-    "createdAt": "2023-11-30T02:14:48.732Z"
+    "createdAt": "2023-11-30T02:23:03.330Z"
   }
 }
