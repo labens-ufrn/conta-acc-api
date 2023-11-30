@@ -32,6 +32,13 @@ export const v1ListResolution = p.route.get({
 
     const querySchema: Prisma.ResolutionFindManyArgs = {
       ...(include && getInclude(include)),
+      // include: {
+      //   categories: {
+      //     include: {
+      //       activities: true,
+      //     },
+      //   },
+      // },
       ...(search && {
         where: {
           OR: [

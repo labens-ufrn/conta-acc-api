@@ -9,13 +9,14 @@ const bodySchema = z.object({
   description: z.string().optional(),
   link: z.string().optional(),
   courseId: z.string(),
+  isCurrent: z.boolean().optional(),
 });
 
 export const v1CreateResolution = p.route.post({
   key: "createResolution",
   bodySchema,
   async resolver({ body }, ctx) {
-    const { name, courseId, description, link } = body;
+    const { name, courseId, description, link, isCurrent } = body;
 
     const course = await courseModel.findUnique({
       where: {
@@ -32,6 +33,7 @@ export const v1CreateResolution = p.route.post({
         name,
         description,
         link,
+        isCurrent,
         course: {
           connect: {
             id: courseId,
