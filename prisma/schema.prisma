@@ -17,12 +17,69 @@ model Course {
   users    User[]
   students Student[]
 
-  status    Status   @default(ACTIVE)
+  status      Status       @default(ACTIVE)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  metaData    Json?
+  resolutions Resolution[]
+
+  @@map("courses")
+}
+
+model Resolution {
+  id String @id @default(cuid())
+
+  name        String
+  description String?
+  link        String?
+  isCurrent   Boolean? @default(false)
+
+  status     Status       @default(ACTIVE)
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  metaData   Json?
+  courseId   String
+  course     Course       @relation(fields: [courseId], references: [id])
+  categories Categories[]
+
+  @@map("resolutions")
+}
+
+model Categories {
+  id String @id @default(cuid())
+
+  name        String
+  description String?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   metaData  Json?
 
-  @@map("courses")
+  resolutionId String
+  resolution   Resolution   @relation(fields: [resolutionId], references: [id])
+  activities   Activities[]
+
+  @@map("categories")
+}
+
+model Activities {
+  id String @id @default(cuid())
+
+  name        String
+  code        String
+  description String?
+
+  workloadSemester Int?
+  workloadActivity Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  metaData  Json?
+
+  categoryId String
+  category   Categories @relation(fields: [categoryId], references: [id])
+
+  @@map("activities")
 }
 
 model User {

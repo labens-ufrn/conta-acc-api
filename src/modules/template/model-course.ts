@@ -1,5 +1,5 @@
 import { prismaClient } from "@src/core/db/prisma";
 
-export const courseModel = {
+export const templateModel = {
   ...prismaClient.course,
 };

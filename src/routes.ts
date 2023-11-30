@@ -9,11 +9,13 @@ import { healthRoutes } from "./modules/health/routes";
 import { userController } from "./modules/user/user-controller";
 import { managerController } from "./modules/manager/manager-controller";
 import { courseController } from "./modules/course/course-controller";
+import { resolutionController } from "./modules/resolution/resolution-controller";
 
 const controllers: Controller[] = [
   userController,
   managerController,
   courseController,
+  resolutionController,
 ];
 
 export async function setRoutes(app: Express) {
