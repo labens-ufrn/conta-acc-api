@@ -1,6 +1,5 @@
 import p from "pomme-ts";
 import { z } from "zod";
-import { Prisma } from "@prisma/client";
 import { resolutionModel } from "./model-resolution";
 
 const bodySchema = z.object({

@@ -1,5 +1,5 @@
 {
-  "7868d30e12f7fe973ea7cdb01c799436": {
+  "aec7c6bd5be8914244796093a7ff8e11": {
     "payload": [
       "<@key>createUser</@key><@req>POST</@req><@controller>user</@controller><@route>/user/</@route><@body>{\"type\":\"object\",\"properties\":{\"courseId\":{\"type\":\"string\"},\"name\":{\"type\":\"string\"},\"email\":{\"type\":\"string\",\"format\":\"email\"},\"password\":{\"type\":\"string\"},\"role\":{\"type\":\"string\"}},\"required\":[\"courseId\",\"name\",\"email\",\"password\",\"role\"],\"additionalProperties\":false,\"$schema\":\"http://json-schema.org/draft-07/schema#\"}</@body>",
       "<@key>listUsers</@key><@req>GET</@req><@controller>user</@controller><@route>/user/</@route><@query>{\"type\":\"object\",\"properties\":{\"include\":{\"type\":\"string\",\"enum\":[\"users\"]},\"search\":{\"type\":\"string\"},\"page\":{\"type\":\"number\",\"default\":1},\"pageSize\":{\"type\":\"number\",\"default\":10}},\"additionalProperties\":false,\"$schema\":\"http://json-schema.org/draft-07/schema#\"}</@query>",
@@ -14,8 +14,9 @@
       "<@key>updateResolution</@key><@req>PUT</@req><@controller>resolution</@controller><@route>/resolution/:id</@route><@body>{\"type\":\"object\",\"properties\":{\"name\":{\"type\":\"string\"},\"description\":{\"type\":\"string\"},\"link\":{\"type\":\"string\"},\"isCurrent\":{\"type\":\"boolean\"}},\"additionalProperties\":false,\"$schema\":\"http://json-schema.org/draft-07/schema#\"}</@body>",
       "<@key>listCategories</@key><@req>GET</@req><@controller>categories</@controller><@route>/categories/:resolutionId</@route><@query>{\"type\":\"object\",\"properties\":{\"include\":{\"type\":\"string\"},\"search\":{\"type\":\"string\"},\"page\":{\"type\":\"number\",\"default\":1},\"pageSize\":{\"type\":\"number\",\"default\":10}},\"additionalProperties\":false,\"$schema\":\"http://json-schema.org/draft-07/schema#\"}</@query>",
       "<@key>createCategory</@key><@req>POST</@req><@controller>categories</@controller><@route>/categories/</@route><@body>{\"type\":\"object\",\"properties\":{\"name\":{\"type\":\"string\"},\"description\":{\"type\":\"string\"},\"resolutionId\":{\"type\":\"string\"}},\"required\":[\"name\",\"resolutionId\"],\"additionalProperties\":false,\"$schema\":\"http://json-schema.org/draft-07/schema#\"}</@body>",
-      "<@key>updateCategory</@key><@req>PUT</@req><@controller>categories</@controller><@route>/categories/:id</@route><@body>{\"type\":\"object\",\"properties\":{\"name\":{\"type\":\"string\"},\"description\":{\"type\":\"string\"}},\"additionalProperties\":false,\"$schema\":\"http://json-schema.org/draft-07/schema#\"}</@body>"
+      "<@key>updateCategory</@key><@req>PUT</@req><@controller>categories</@controller><@route>/categories/:id</@route><@body>{\"type\":\"object\",\"properties\":{\"name\":{\"type\":\"string\"},\"description\":{\"type\":\"string\"}},\"additionalProperties\":false,\"$schema\":\"http://json-schema.org/draft-07/schema#\"}</@body>",
+      "<@key>listActivities</@key><@req>GET</@req><@controller>activities</@controller><@route>/activities/:categoryId</@route><@query>{\"type\":\"object\",\"properties\":{\"include\":{\"type\":\"string\"},\"search\":{\"type\":\"string\"},\"page\":{\"type\":\"number\",\"default\":1},\"pageSize\":{\"type\":\"number\",\"default\":10}},\"additionalProperties\":false,\"$schema\":\"http://json-schema.org/draft-07/schema#\"}</@query>"
     ],
-    "createdAt": "2023-11-30T11:32:54.157Z"
+    "createdAt": "2023-12-01T21:07:03.936Z"
   }
 }
