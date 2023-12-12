@@ -20,7 +20,8 @@
     "rootDirs": ["./generated"]
   },
   "ts-node": {
-    "transpileOnly": true
+    "transpileOnly": true,
+    "require": ["tsconfig-paths/register"]
   },
   "exclude": ["build-sdk.ts"]
 }

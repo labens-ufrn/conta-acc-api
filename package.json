@@ -5,9 +5,10 @@
   "repository": "git@github.com:labens-ufrn/conta-acc-api.git",
   "author": "Everton Fernande <evertonfrnds@gmail.com>",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc --project tsconfig.json && tscpaths -p tsconfig.json -s ./src -o ./dist",
     "dev": "tsx --watch ./src/index.ts",
-    "build-sdk-js": "cd .sdk-spec/sdk-js && yarn && yarn build-sdk-js"
+    "build-sdk-js": "cd .sdk-spec/sdk-js && yarn && yarn build-sdk-js",
+    "start": "node -r tsconfig-paths/register ./dist/index.js"
   },
   "license": "MIT",
   "devDependencies": {
@@ -20,6 +21,7 @@
     "@types/uuid": "^9.0.4",
     "prisma": "^5.3.1",
     "tsconfig-paths": "^4.2.0",
+    "tscpaths": "^0.0.9",
     "tsx": "^3.13.0",
     "typescript": "^5.2.2"
   },
