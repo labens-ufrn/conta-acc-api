@@ -1,7 +1,6 @@
 import p from "pomme-ts";
 import { z } from "zod";
 import { Prisma } from "@prisma/client";
-import { courseModel } from "./model-course";
 
 const bodySchema = z.object({
   name: z.string(),

@@ -5,6 +5,7 @@
   "repository": "git@github.com:labens-ufrn/conta-acc-api.git",
   "author": "Everton Fernande <evertonfrnds@gmail.com>",
   "scripts": {
+    "build": "tsc",
     "dev": "tsx --watch ./src/index.ts",
     "build-sdk-js": "cd .sdk-spec/sdk-js && yarn && yarn build-sdk-js"
   },
