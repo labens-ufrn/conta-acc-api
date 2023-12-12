@@ -8,8 +8,21 @@ import { httpContextMw } from "./core/middlewares/http-context-mw";
 import { healthRoutes } from "./modules/health/routes";
 import { userController } from "./modules/user/user-controller";
 import { managerController } from "./modules/manager/manager-controller";
+import { courseController } from "./modules/course/course-controller";
+import { resolutionController } from "./modules/resolution/resolution-controller";
+import { categoriesController } from "./modules/categories/categories-controller";
+import { activitiesController } from "./modules/activities/activities-controller";
+import { departamentController } from "./modules/departaments/departament-controller";
 
-const controllers: Controller[] = [userController, managerController];
+const controllers: Controller[] = [
+  userController,
+  managerController,
+  courseController,
+  resolutionController,
+  categoriesController,
+  activitiesController,
+  departamentController,
+];
 
 export async function setRoutes(app: Express) {
   app.use("/", healthRoutes);
@@ -27,13 +40,6 @@ export async function setRoutes(app: Express) {
       }),
     ])
     .build();
-
-  server.app.use((err, req, res, next) => {
-    if (err) {
-      res.status(400).json({ error: err.message });
-    }
-    next();
-  });
 
   return server;
 }

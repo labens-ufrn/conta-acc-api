@@ -1024,10 +1024,10 @@ path-to-regexp@0.1.7:
   resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-0.1.7.tgz#df604178005f522f15eb4490e7247a1bfaa67f8c"
   integrity sha512-5DFkuoqlv1uYQKxy8omFBeJPQcdoE07Kv2sferDCrAq1ohOU+MSDswDIbnx3YAM60qIOnYa53wBhXW0EbMonrQ==
 
-pomme-ts@1.2.6:
-  version "1.2.6"
-  resolved "https://registry.yarnpkg.com/pomme-ts/-/pomme-ts-1.2.6.tgz#981ecafa224765ee5bd1f1b6235e65805634660f"
-  integrity sha512-B0P6g2cbnQXVjSNKU/DUZYFDwXORK+JoNMFshQMRaZu/wthYnYyJnH+mnLdWcvUSH6P5k7O9oenWO/8r0jM9vQ==
+pomme-ts@^1.2.9:
+  version "1.2.9"
+  resolved "https://registry.yarnpkg.com/pomme-ts/-/pomme-ts-1.2.9.tgz#90bec7feb1ffb4ffdf463345e6fcc179ba8bb6bc"
+  integrity sha512-CAw+zyTCg6vRI1ULKVnMuZGmDBAnk64i76O9uBB5gBkqn6jA4LZu0yxZm5hCXDjgbEEu1BEv9qnZVJA9nKqX7A==
   dependencies:
     express "^4.18.2"
     fs-extra "^11.1.1"

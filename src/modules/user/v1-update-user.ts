@@ -5,6 +5,7 @@ import { userModel } from "./model-user";
 const bodySchema = z.object({
   name: z.string().optional(),
   password: z.string().optional(),
+  email: z.string().email().optional(),
   role: z.string().optional(),
   status: z.enum(["ACTIVE", "INACTIVE"]).optional(),
 });
@@ -14,7 +15,7 @@ export const v1UpdateUser = p.route.put({
   path: "/:userId",
   bodySchema,
   async resolver(input, ctx) {
-    const { name, password, role, status } = input.body;
+    const { name, password, role, email, status } = input.body;
     const { userId } = input.params;
 
     const userExisted = await userModel.count({
@@ -24,7 +25,28 @@ export const v1UpdateUser = p.route.put({
     });
 
     if (!userExisted) {
-      throw new Error("User not found");
+      p.error.badRequest("User not found");
+    }
+
+    if (email) {
+      const emailInUse = await userModel.count({
+        where: {
+          AND: [
+            {
+              email,
+            },
+            {
+              id: {
+                not: userId,
+              },
+            },
+          ],
+        },
+      });
+
+      if (emailInUse) {
+        p.error.badRequest("Email already in use");
+      }
     }
 
     const user = await userModel.update({
@@ -33,7 +55,10 @@ export const v1UpdateUser = p.route.put({
       },
       data: {
         name,
-        password,
+        ...(password &&
+          password.length > 0 && {
+            password: userModel.hashPassword(password),
+          }),
         role: role as any,
         status,
       },
