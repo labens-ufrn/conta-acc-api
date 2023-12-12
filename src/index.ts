@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { createServer } from "http";
 import { appConfig } from "./config";
 import { configureHttpServer } from "./core/server/server-handlers";
