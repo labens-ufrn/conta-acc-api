@@ -1,45 +1,30 @@
 import p from "pomme-ts";
 import { z } from "zod";
-import { userModel } from "./model-user";
 import { Prisma } from "@prisma/client";
 import { getInclude } from "@src/core/utils/helper-include";
+import { departmentModel } from "./model-departament";
 
 const querySchema = z.object({
   include: z.string().optional(),
   search: z.string().optional(),
   page: z.number().default(1),
   pageSize: z.number().default(10),
-  role: z.string().optional(),
-  courseId: z.string().optional(),
 });
 
-export const v1ListUsers = p.route.get({
-  key: "listUsers",
+export const v1ListDepartament = p.route.get({
+  key: "listDepartaments",
   querySchema,
-  async resolver(input, ctx) {
-    let {
-      include,
-      page = 1,
-      pageSize = 10,
-      search,
-      courseId,
-      role,
-    } = input.query;
+  async resolver({ query }, ctx) {
+    let { include, page = 1, pageSize = 10, search } = query;
 
-    page = Number(page);
     pageSize = Number(pageSize);
+    page = Number(page);
 
     const offset = (page - 1) * pageSize;
 
-    const total = await userModel.count({
-      where: {
-        ...(role && {
-          role: role.toUpperCase() as any,
-        }),
-        ...(courseId && {
-          courseId,
-        }),
-        ...(search && {
+    const total = await departmentModel.count({
+      ...(search && {
+        where: {
           OR: [
             {
               name: {
@@ -48,26 +33,20 @@ export const v1ListUsers = p.route.get({
               },
             },
             {
-              email: {
+              sede: {
                 contains: search,
                 mode: "insensitive",
               },
             },
           ],
-        }),
-      },
+        },
+      }),
     });
 
-    const query: Prisma.UserFindManyArgs = {
+    const querySchema: Prisma.DepartamentFindManyArgs = {
       ...(include && getInclude(include)),
-      where: {
-        ...(role && {
-          role: role.toUpperCase() as any,
-        }),
-        ...(courseId && {
-          courseId,
-        }),
-        ...(search && {
+      ...(search && {
+        where: {
           OR: [
             {
               name: {
@@ -76,25 +55,24 @@ export const v1ListUsers = p.route.get({
               },
             },
             {
-              email: {
+              sede: {
                 contains: search,
                 mode: "insensitive",
               },
             },
           ],
-        }),
-      },
-
+        },
+      }),
       skip: offset,
       take: pageSize,
     };
 
-    const users = await userModel.findMany(query);
+    const departaments = await departmentModel.findMany(querySchema);
 
     const totalPages = Math.ceil(total / pageSize);
 
     return {
-      users,
+      departaments,
       total,
       page,
       totalPages,

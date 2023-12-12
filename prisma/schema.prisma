@@ -10,18 +10,35 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Departament {
+  id String @id @default(cuid())
+
+  name String
+  sede String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  metaData  Json?
+  courses   Course[]
+
+  @@map("departaments")
+}
+
 model Course {
   id String @id @default(cuid())
 
-  name     String
+  name String
+
   users    User[]
   students Student[]
 
-  status      Status       @default(ACTIVE)
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  metaData    Json?
-  resolutions Resolution[]
+  status       Status       @default(ACTIVE)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  metaData     Json?
+  resolutions  Resolution[]
+  department   Departament  @relation(fields: [departmentId], references: [id])
+  departmentId String
 
   @@map("courses")
 }

@@ -24,7 +24,17 @@ export const v1CreateUser = p.route.post({
     });
 
     if (!courseExist) {
-      throw new Error("Course not found");
+      p.error.badRequest("Course not found");
+    }
+
+    const emailExist = await userModel.count({
+      where: {
+        email,
+      },
+    });
+
+    if (emailExist) {
+      p.error.badRequest("Email already in use");
     }
 
     const user = await userModel.create({
@@ -33,6 +43,7 @@ export const v1CreateUser = p.route.post({
         email,
         password: userModel.hashPassword(password),
         role: role as any,
+        courseId,
       },
     });
 

@@ -9,31 +9,42 @@ const querySchema = z.object({
   search: z.string().optional(),
   page: z.number().default(1),
   pageSize: z.number().default(10),
+  id: z.string().optional(),
 });
 
 export const v1ListCourses = p.route.get({
   key: "listCourses",
   querySchema,
+  noMw: true,
   async resolver({ query }, ctx) {
-    const { include, page = 1, pageSize = 10, search } = query;
+    let { include, page = 1, pageSize = 10, search, id } = query;
+
+    pageSize = Number(pageSize);
+    page = Number(page);
 
     const offset = (page - 1) * pageSize;
 
     const total = await courseModel.count({
-      ...(search && {
-        where: {
+      where: {
+        ...(id && {
+          id,
+        }),
+        ...(search && {
           name: {
             contains: search,
             mode: "insensitive",
           },
-        },
-      }),
+        }),
+      },
     });
 
     const querySchema: Prisma.CourseFindManyArgs = {
       ...(include && getInclude(include)),
-      ...(search && {
-        where: {
+      where: {
+        ...(id && {
+          id,
+        }),
+        ...(search && {
           OR: [
             {
               name: {
@@ -42,8 +53,9 @@ export const v1ListCourses = p.route.get({
               },
             },
           ],
-        },
-      }),
+        }),
+      },
+
       skip: offset,
       take: pageSize,
     };

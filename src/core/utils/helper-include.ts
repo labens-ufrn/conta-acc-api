@@ -24,6 +24,7 @@ export const getIncludeTest = (include: string): any => {
 };
 
 export const getInclude = (include: string): any => {
+  if (!include) return null;
   const includeObject = include.split(",").reduce((acc, field) => {
     let fieldObject;
     if (field.includes(".")) {
