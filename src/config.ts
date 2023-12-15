@@ -71,7 +71,6 @@ const configMap = {
 
 export const appConfig: typeof production = configMap[nodeEnv];
 
-console.log(process.env.PORT);
 appConfig.port =
   typeof process.env.PORT === "undefined"
     ? appConfig.port

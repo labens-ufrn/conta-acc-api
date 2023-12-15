@@ -17,8 +17,11 @@ export const v1ListActivities = p.route.get({
   path: "/:categoryId",
   querySchema,
   async resolver({ query, params }, ctx) {
-    const { include, page = 1, pageSize = 10, search } = query;
+    let { include, page = 1, pageSize = 10, search } = query;
     const { categoryId } = params;
+
+    pageSize = Number(pageSize);
+    page = Number(page);
 
     const offset = (page - 1) * pageSize;
 

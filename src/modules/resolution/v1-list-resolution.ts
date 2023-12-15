@@ -17,7 +17,12 @@ export const v1ListResolution = p.route.get({
   key: "listResolution",
   querySchema,
   async resolver({ query }, ctx) {
-    const { include, page = 1, pageSize = 10, id, isCurrent, search } = query;
+    let { include, page = 1, pageSize = 10, id, isCurrent, search } = query;
+
+    pageSize = Number(pageSize);
+    page = Number(page);
+
+    const { courseId } = ctx;
 
     const offset = (page - 1) * pageSize;
 
@@ -25,6 +30,7 @@ export const v1ListResolution = p.route.get({
       where: {
         id,
         isCurrent,
+        courseId,
         ...(search && {
           name: {
             contains: search,
@@ -38,6 +44,7 @@ export const v1ListResolution = p.route.get({
       ...(include && getInclude(include)),
       where: {
         id,
+        courseId,
         isCurrent,
         ...(search && {
           name: {
@@ -45,6 +52,9 @@ export const v1ListResolution = p.route.get({
             mode: "insensitive",
           },
         }),
+      },
+      orderBy: {
+        createdAt: "desc",
       },
       skip: offset,
       take: pageSize,

@@ -3,10 +3,10 @@ import { z } from "zod";
 import { resolutionModel } from "./model-resolution";
 
 const bodySchema = z.object({
-  name: z.string().optional(),
-  description: z.string().optional(),
-  link: z.string().optional(),
-  isCurrent: z.boolean().optional(),
+  name: z.string().optional().nullable(),
+  description: z.string().optional().nullable(),
+  link: z.string().optional().nullable(),
+  isCurrent: z.boolean().optional().nullable(),
 });
 
 export const v1UpdateResolution = p.route.put({
@@ -17,6 +17,8 @@ export const v1UpdateResolution = p.route.put({
     const { name, description, link, isCurrent } = body;
     const { id } = params;
 
+    const { courseId } = ctx;
+
     const resolutionFound = await resolutionModel.findUnique({
       where: {
         id,
@@ -25,6 +27,19 @@ export const v1UpdateResolution = p.route.put({
 
     if (!resolutionFound) {
       p.error.badRequest("Resolution not found");
+    }
+
+    if (isCurrent) {
+      await resolutionModel.updateMany({
+        where: {
+          course: {
+            id: courseId,
+          },
+        },
+        data: {
+          isCurrent: false,
+        },
+      });
     }
 
     const resolution = await resolutionModel.update({

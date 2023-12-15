@@ -10,20 +10,25 @@ const querySchema = z.object({
   search: z.string().optional(),
   page: z.number().default(1),
   pageSize: z.number().default(10),
+  id: z.string().optional(),
+  resolutionId: z.string(),
 });
 
 export const v1ListCategories = p.route.get({
   key: "listCategories",
-  path: "/:resolutionId",
   querySchema,
   async resolver({ query }, ctx) {
-    const { include, page = 1, pageSize = 10, search } = query;
+    let { include, page = 1, pageSize = 10, search, id, resolutionId } = query;
 
-    const { resolutionId } = ctx.params;
+    const { courseId } = ctx;
+
+    pageSize = Number(pageSize);
+    page = Number(page);
 
     const resolutionFound = await resolutionModel.findUnique({
       where: {
         id: resolutionId,
+        courseId,
       },
     });
 
@@ -35,6 +40,10 @@ export const v1ListCategories = p.route.get({
 
     const total = await categoryModel.count({
       where: {
+        resolutionId,
+        ...(id && {
+          id,
+        }),
         ...(search && {
           name: {
             contains: search,
@@ -48,6 +57,9 @@ export const v1ListCategories = p.route.get({
       ...(include && getInclude(include)),
       where: {
         resolutionId,
+        ...(id && {
+          id,
+        }),
         ...(search && {
           OR: [
             {

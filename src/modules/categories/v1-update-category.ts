@@ -4,7 +4,7 @@ import { categoryModel } from "./model-categories";
 
 const bodySchema = z.object({
   name: z.string().optional(),
-  description: z.string().optional(),
+  description: z.string().optional().nullable(),
 });
 
 export const v1UpdateCategory = p.route.put({

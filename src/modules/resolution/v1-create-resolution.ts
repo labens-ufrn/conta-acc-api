@@ -1,15 +1,14 @@
 import p from "pomme-ts";
 import { z } from "zod";
-import { Prisma } from "@prisma/client";
 import { courseModel } from "../course/model-course";
 import { resolutionModel } from "./model-resolution";
 
 const bodySchema = z.object({
   name: z.string(),
-  description: z.string().optional(),
-  link: z.string().optional(),
+  description: z.string().optional().nullable(),
+  link: z.string().optional().nullable(),
   courseId: z.string(),
-  isCurrent: z.boolean().optional(),
+  isCurrent: z.boolean().optional().nullable(),
 });
 
 export const v1CreateResolution = p.route.post({
@@ -26,6 +25,19 @@ export const v1CreateResolution = p.route.post({
 
     if (!course) {
       p.error.badRequest("Course not found");
+    }
+
+    if (isCurrent) {
+      await resolutionModel.updateMany({
+        where: {
+          course: {
+            id: courseId,
+          },
+        },
+        data: {
+          isCurrent: false,
+        },
+      });
     }
 
     const resolution = await resolutionModel.create({

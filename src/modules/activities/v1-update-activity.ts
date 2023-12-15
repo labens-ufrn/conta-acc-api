@@ -1,38 +1,33 @@
 import p from "pomme-ts";
 import { z } from "zod";
-import { categoryModel } from "../categories/model-categories";
 import { activitiesModel } from "./model-activities";
 
 const bodySchema = z.object({
-  name: z.string(),
-  code: z.string(),
+  name: z.string().optional().nullable(),
+  code: z.string().optional().nullable(),
   workloadSemester: z.number().optional().nullable(),
   workloadActivity: z.number().optional().nullable(),
   description: z.string().optional().nullable(),
-  categoryId: z.string(),
 });
 
-export const v1CreateActivity = p.route.post({
-  key: "createActivity",
+export const v1UpdateActivity = p.route.put({
+  key: "updateActivity",
+  path: "/:activityId",
   bodySchema,
   async resolver({ body }, ctx) {
-    const {
-      name,
-      categoryId,
-      code,
-      description,
-      workloadActivity,
-      workloadSemester,
-    } = body;
+    const { name, code, description, workloadActivity, workloadSemester } =
+      body;
 
-    const categoryFoiund = await categoryModel.findUnique({
+    const { activityId } = ctx.params;
+
+    const activityFound = await activitiesModel.findUnique({
       where: {
-        id: categoryId,
+        id: activityId,
       },
     });
 
-    if (!categoryFoiund) {
-      p.error.badRequest("Category not found");
+    if (!activityFound) {
+      p.error.badRequest("Activity not found");
     }
 
     if (!workloadActivity && !workloadSemester) {
@@ -41,14 +36,16 @@ export const v1CreateActivity = p.route.post({
       );
     }
 
-    const activity = await activitiesModel.create({
+    const activity = await activitiesModel.update({
+      where: {
+        id: activityId,
+      },
       data: {
         name,
         code,
         description,
         workloadActivity,
         workloadSemester,
-        categoryId,
       },
     });
 
