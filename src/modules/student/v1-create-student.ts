@@ -1,6 +1,5 @@
 import p from "pomme-ts";
 import { z } from "zod";
-import { courseModel } from "../course/model-course";
 import { userModel } from "../user/model-user";
 import { studentModel } from "./model-student";
 
