@@ -20,7 +20,7 @@ export const isAuthenticatedRoleMw =
 
     if (!hasRole) {
       return res.status(403).send({
-        message: "Forbidden",
+        message: "Unauthorized",
       });
     }
 

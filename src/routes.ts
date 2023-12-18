@@ -13,6 +13,7 @@ import { resolutionController } from "./modules/resolution/resolution-controller
 import { categoriesController } from "./modules/categories/categories-controller";
 import { activitiesController } from "./modules/activities/activities-controller";
 import { departamentController } from "./modules/departaments/departament-controller";
+import { studentController } from "./modules/student/student-controller";
 
 const controllers: Controller[] = [
   userController,
@@ -22,6 +23,7 @@ const controllers: Controller[] = [
   categoriesController,
   activitiesController,
   departamentController,
+  studentController,
 ];
 
 export async function setRoutes(app: Express) {
