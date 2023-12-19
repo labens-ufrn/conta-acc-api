@@ -4,6 +4,7 @@ import { Prisma } from "@prisma/client";
 import { getInclude } from "@src/core/utils/helper-include";
 import { activitiesModel } from "./model-activities";
 import { categoryModel } from "../categories/model-categories";
+import { activitiesOnCategoryModel } from "./model-activities-on-category";
 
 const querySchema = z.object({
   include: z.string().optional(),
@@ -35,7 +36,7 @@ export const v1ListActivities = p.route.get({
       p.error.badRequest("Category not found");
     }
 
-    const where: Prisma.ActivitiesWhereInput = {
+    const where: Prisma.ActivitiesOnCategoryWhereInput = {
       categoryId,
       ...(search && {
         OR: [
@@ -55,18 +56,18 @@ export const v1ListActivities = p.route.get({
       }),
     };
 
-    const total = await activitiesModel.count({
+    const total = await activitiesOnCategoryModel.count({
       where,
     });
 
-    const querySchema: Prisma.ActivitiesFindManyArgs = {
+    const querySchema: Prisma.ActivitiesOnCategoryFindManyArgs = {
       ...(include && getInclude(include)),
       where,
       skip: offset,
       take: pageSize,
     };
 
-    const activities = await activitiesModel.findMany(querySchema);
+    const activities = await activitiesOnCategoryModel.findMany(querySchema);
 
     const totalPages = Math.ceil(total / pageSize);
 

@@ -2,6 +2,7 @@ import p from "pomme-ts";
 import { z } from "zod";
 import { categoryModel } from "../categories/model-categories";
 import { activitiesModel } from "./model-activities";
+import { activitiesOnCategoryModel } from "./model-activities-on-category";
 
 const bodySchema = z.object({
   name: z.string(),
@@ -41,7 +42,15 @@ export const v1CreateActivity = p.route.post({
       );
     }
 
-    const activity = await activitiesModel.create({
+    const activityCreated = await activitiesModel.create({
+      data: {},
+    });
+
+    if (!activityCreated) {
+      p.error.serverError("Error on create activity");
+    }
+
+    const activity = await activitiesOnCategoryModel.create({
       data: {
         name,
         code,
@@ -49,6 +58,7 @@ export const v1CreateActivity = p.route.post({
         workloadActivity,
         workloadSemester,
         categoryId,
+        activityId: activityCreated.id,
       },
     });
 

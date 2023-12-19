@@ -51,13 +51,14 @@ model Resolution {
   link        String?
   isCurrent   Boolean? @default(false)
 
-  status     Status       @default(ACTIVE)
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
-  metaData   Json?
-  courseId   String
-  course     Course       @relation(fields: [courseId], references: [id])
-  categories Categories[]
+  status        Status          @default(ACTIVE)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  metaData      Json?
+  courseId      String
+  course        Course          @relation(fields: [courseId], references: [id])
+  categories    Categories[]
+  StudentReview StudentReview[]
 
   @@map("resolutions")
 }
@@ -73,14 +74,17 @@ model Categories {
   metaData  Json?
 
   resolutionId String
-  resolution   Resolution   @relation(fields: [resolutionId], references: [id])
-  activities   Activities[]
+  resolution   Resolution             @relation(fields: [resolutionId], references: [id])
+  activities   ActivitiesOnCategory[]
 
   @@map("categories")
 }
 
-model Activities {
+model ActivitiesOnCategory {
   id String @id @default(cuid())
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   name        String
   code        String
@@ -89,12 +93,24 @@ model Activities {
   workloadSemester Int?
   workloadActivity Int?
 
+  categoryId String
+  category   Categories @relation(fields: [categoryId], references: [id])
+
+  activityId String
+  activity   Activities @relation(fields: [activityId], references: [id])
+
+  @@map("activitiesOnCategories")
+}
+
+model Activities {
+  id String @id @default(cuid())
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   metaData  Json?
 
-  categoryId String
-  category   Categories @relation(fields: [categoryId], references: [id])
+  categories     ActivitiesOnCategory[]
+  ReviewActivity ReviewActivity[]
 
   @@map("activities")
 }
@@ -132,10 +148,45 @@ model Student {
   user   User?  @relation(fields: [userId], references: [id])
   userId String @unique
 
-  course   Course? @relation(fields: [courseId], references: [id])
+  course   Course?         @relation(fields: [courseId], references: [id])
   courseId String?
+  review   StudentReview[]
 
   @@map("students")
+}
+
+model StudentReview {
+  id String @id @default(cuid())
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  metaData  Json?
+
+  studentId String
+  student   Student @relation(fields: [studentId], references: [id])
+
+  resolutionId String?
+  resolution   Resolution? @relation(fields: [resolutionId], references: [id])
+
+  reviewActivity ReviewActivity[]
+
+  @@map("studentReviews")
+}
+
+model ReviewActivity {
+  id String @id @default(cuid())
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  metaData  Json?
+
+  studentReviewId String
+  studentReview   StudentReview @relation(fields: [studentReviewId], references: [id])
+
+  activityId String
+  activity   Activities @relation(fields: [activityId], references: [id])
+
+  @@map("reviewActivities")
 }
 
 enum Status {

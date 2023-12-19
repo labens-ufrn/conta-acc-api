@@ -2,6 +2,7 @@ import p from "pomme-ts";
 import { z } from "zod";
 import { userModel } from "../user/model-user";
 import { studentModel } from "./model-student";
+import { studentReviewModel } from "./review/model-student-review";
 
 const bodySchema = z.object({
   name: z.string(),
@@ -38,11 +39,26 @@ export const v1CreateStudent = p.route.post({
       },
     });
 
+    if (!user) {
+      p.error.serverError("Error creating user");
+    }
+
     const student = await studentModel.create({
       data: {
         enrollId,
         courseId,
         userId: user.id,
+      },
+    });
+
+    if (!student) {
+      p.error.serverError("Error creating student");
+    }
+
+    const studentReview = await studentReviewModel.create({
+      data: {
+        studentId: student.id,
+        resolutionId: null,
       },
     });
 

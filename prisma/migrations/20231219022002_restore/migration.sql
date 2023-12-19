@@ -24,7 +24,7 @@ CREATE TABLE "courses" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "metaData" JSONB,
-    "departamentId" TEXT NOT NULL,
+    "departmentId" TEXT NOT NULL,
 
     CONSTRAINT "courses_pkey" PRIMARY KEY ("id")
 );
@@ -59,17 +59,27 @@ CREATE TABLE "categories" (
 );
 
 -- CreateTable
-CREATE TABLE "activities" (
+CREATE TABLE "activitiesOnCategories" (
     "id" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
     "name" TEXT NOT NULL,
     "code" TEXT NOT NULL,
     "description" TEXT,
     "workloadSemester" INTEGER,
     "workloadActivity" INTEGER,
+    "categoryId" TEXT NOT NULL,
+    "activityId" TEXT NOT NULL,
+
+    CONSTRAINT "activitiesOnCategories_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "activities" (
+    "id" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "metaData" JSONB,
-    "categoryId" TEXT NOT NULL,
 
     CONSTRAINT "activities_pkey" PRIMARY KEY ("id")
 );
@@ -114,7 +124,7 @@ CREATE UNIQUE INDEX "students_enrollId_key" ON "students"("enrollId");
 CREATE UNIQUE INDEX "students_userId_key" ON "students"("userId");
 
 -- AddForeignKey
-ALTER TABLE "courses" ADD CONSTRAINT "courses_departamentId_fkey" FOREIGN KEY ("departamentId") REFERENCES "departaments"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "courses" ADD CONSTRAINT "courses_departmentId_fkey" FOREIGN KEY ("departmentId") REFERENCES "departaments"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "resolutions" ADD CONSTRAINT "resolutions_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -123,7 +133,10 @@ ALTER TABLE "resolutions" ADD CONSTRAINT "resolutions_courseId_fkey" FOREIGN KEY
 ALTER TABLE "categories" ADD CONSTRAINT "categories_resolutionId_fkey" FOREIGN KEY ("resolutionId") REFERENCES "resolutions"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "activities" ADD CONSTRAINT "activities_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "categories"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "activitiesOnCategories" ADD CONSTRAINT "activitiesOnCategories_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "categories"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "activitiesOnCategories" ADD CONSTRAINT "activitiesOnCategories_activityId_fkey" FOREIGN KEY ("activityId") REFERENCES "activities"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "users" ADD CONSTRAINT "users_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses"("id") ON DELETE SET NULL ON UPDATE CASCADE;

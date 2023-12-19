@@ -34,7 +34,7 @@ export const v1SignUp = p.route.post({
     }
 
     if (studentExisted) {
-      p.error.badRequest("User already existed");
+      p.error.badRequest("Enroll ID already existed");
     }
 
     const user = await userModel.create({
@@ -45,6 +45,26 @@ export const v1SignUp = p.route.post({
         role: "STUDENT",
       },
     });
+
+    if (!user) {
+      p.error.serverError("Error creating user");
+    }
+
+    const student = await studentModel.create({
+      data: {
+        enrollId,
+        userId: user.id,
+        review: {
+          create: {
+            resolutionId: null,
+          },
+        },
+      },
+    });
+
+    if (!student) {
+      p.error.serverError("Error creating student");
+    }
 
     return {
       user,

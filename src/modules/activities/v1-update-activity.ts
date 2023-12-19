@@ -1,6 +1,7 @@
 import p from "pomme-ts";
 import { z } from "zod";
 import { activitiesModel } from "./model-activities";
+import { activitiesOnCategoryModel } from "./model-activities-on-category";
 
 const bodySchema = z.object({
   name: z.string().optional().nullable(),
@@ -20,13 +21,13 @@ export const v1UpdateActivity = p.route.put({
 
     const { activityId } = ctx.params;
 
-    const activityFound = await activitiesModel.findUnique({
+    const activityFound = await activitiesOnCategoryModel.findUnique({
       where: {
         id: activityId,
       },
     });
 
-    if (!activityFound) {
+    if (!activityFound || !activityFound.activityId) {
       p.error.badRequest("Activity not found");
     }
 
@@ -36,7 +37,7 @@ export const v1UpdateActivity = p.route.put({
       );
     }
 
-    const activity = await activitiesModel.update({
+    const activity = await activitiesOnCategoryModel.update({
       where: {
         id: activityId,
       },
