@@ -29,6 +29,16 @@ export const v1CreateStudent = p.route.post({
       p.error.badRequest("Email already in use");
     }
 
+    const enrollIdFound = await studentModel.findFirst({
+      where: {
+        enrollId,
+      },
+    });
+
+    if (enrollIdFound) {
+      p.error.badRequest("Enroll ID already in use");
+    }
+
     const user = await userModel.create({
       data: {
         name,
@@ -55,7 +65,7 @@ export const v1CreateStudent = p.route.post({
       p.error.serverError("Error creating student");
     }
 
-    const studentReview = await studentReviewModel.create({
+    await studentReviewModel.create({
       data: {
         studentId: student.id,
         resolutionId: null,

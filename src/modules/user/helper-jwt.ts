@@ -5,6 +5,7 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 type GenerateJwtProps = {
   id: string;
   courseId: string;
+  studentId: string;
   createdAt: string | Date;
   metadata?: Record<string | number, string | number>;
   expire?: string;
@@ -32,6 +33,7 @@ export function generateJwt(props: GenerateJwtProps) {
   let {
     id,
     courseId,
+    studentId,
     createdAt,
     metadata,
     expire,
@@ -58,6 +60,7 @@ export function generateJwt(props: GenerateJwtProps) {
       {
         id: String(id),
         courseId: String(courseId),
+        studentId: String(studentId),
         createdAt:
           createdAt instanceof Date ? createdAt.toISOString() : createdAt,
         dataTime: Date.now(),

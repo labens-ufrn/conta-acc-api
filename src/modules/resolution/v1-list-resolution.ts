@@ -21,6 +21,7 @@ export const v1ListResolution = p.route.get({
 
     pageSize = Number(pageSize);
     page = Number(page);
+    isCurrent = isCurrent ? Boolean(isCurrent) : undefined;
 
     const { courseId } = ctx;
 

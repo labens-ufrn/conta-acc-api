@@ -1,4 +1,5 @@
 import { courseModel } from "@src/modules/course/model-course";
+import { studentModel } from "@src/modules/student/model-student";
 import { verifyJwt } from "@src/modules/user/helper-jwt";
 import { userModel } from "@src/modules/user/model-user";
 import { NextFunction, Request, Response } from "express";
@@ -27,14 +28,17 @@ export async function decodeJwtCoreMw(
 
   req.user = undefined;
   req.course = undefined;
+  req.student = undefined;
   req.courseId = undefined;
   req.userId = undefined;
+  req.studentId = undefined;
 
   try {
     const res = verifyJwt({ token: jwtToken });
     req.userJwtDecoded = res;
     req.userId = res.id;
     req.courseId = res.courseId;
+    req.studentId = res.studentId;
   } catch (error) {
     console.error("error decoding jwt token", error);
   }
@@ -56,8 +60,16 @@ export async function decodeJwtCoreMw(
       },
     })) ?? null;
 
+  const student =
+    (await studentModel.findFirst({
+      where: {
+        id: req.studentId,
+      },
+    })) ?? null;
+
   req.user = user;
   req.course = course;
+  req.student = student;
   req.userId = String(user?.id);
   req.jwtToken = jwtToken;
   await setLastSeen({ userId: req.userId });

@@ -11,9 +11,12 @@ declare namespace Express {
     course?: any;
     userId?: string;
     courseId?: string;
+    studentId?: string;
+    student?: any;
     userJwtDecoded?: {
       id: string;
       courseId: string;
+      studentId?: string;
       createdAt: string;
       dataTime: string;
       deviceId?: string;

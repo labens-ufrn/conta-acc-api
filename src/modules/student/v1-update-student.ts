@@ -25,8 +25,10 @@ export const v1UpdateStudent = p.route.put({
       const userFound = await userModel.findFirst({
         where: {
           email,
-          id: {
-            not: studentId,
+          student: {
+            id: {
+              not: studentId,
+            },
           },
         },
       });

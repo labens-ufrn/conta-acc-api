@@ -96,8 +96,9 @@ model ActivitiesOnCategory {
   categoryId String
   category   Categories @relation(fields: [categoryId], references: [id])
 
-  activityId String
-  activity   Activities @relation(fields: [activityId], references: [id])
+  activityId     String
+  activity       Activities       @relation(fields: [activityId], references: [id])
+  ReviewActivity ReviewActivity[]
 
   @@map("activitiesOnCategories")
 }
@@ -176,6 +177,8 @@ model StudentReview {
 model ReviewActivity {
   id String @id @default(cuid())
 
+  link String?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   metaData  Json?
@@ -185,6 +188,9 @@ model ReviewActivity {
 
   activityId String
   activity   Activities @relation(fields: [activityId], references: [id])
+
+  activityOnCategoryId String
+  activityOnCategory   ActivitiesOnCategory @relation(fields: [activityOnCategoryId], references: [id])
 
   @@map("reviewActivities")
 }

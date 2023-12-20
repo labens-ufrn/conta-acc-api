@@ -2,6 +2,7 @@ import p from "pomme-ts";
 import { z } from "zod";
 import { userModel } from "../user/model-user";
 import { generateJwt } from "../user/helper-jwt";
+import { studentModel } from "../student/model-student";
 
 const bodySchema = z.object({
   email: z.string(),
@@ -41,6 +42,22 @@ export const v1SignIn = p.route.post({
       throw new Error("Your account is not active");
     }
 
+    let studentId;
+
+    if (userExisted.role === "STUDENT") {
+      const student = await studentModel.findFirst({
+        where: {
+          userId: userExisted.id,
+        },
+      });
+
+      if (!student) {
+        throw new Error("Student not found");
+      }
+
+      studentId = student.id;
+    }
+
     const passwordMatched = userModel.comparePassword(
       password,
       userExisted.password
@@ -55,6 +72,7 @@ export const v1SignIn = p.route.post({
     const token = generateJwt({
       id,
       courseId: userExisted.courseId,
+      studentId,
       createdAt,
       reqIpAddress,
       reqIpCountry,

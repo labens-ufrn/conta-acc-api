@@ -1,3 +1,3 @@
 import { prismaClient } from "@src/core/db/prisma";
 
-export const reviewModel = prismaClient.studentReview;
+export const reviewModel = prismaClient.reviewActivity;
