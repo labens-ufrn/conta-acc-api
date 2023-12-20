@@ -184,6 +184,8 @@ model ReviewActivity {
   name String?
   link String?
 
+  semester String?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   metaData  Json?

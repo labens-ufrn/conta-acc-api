@@ -7,6 +7,7 @@ import { reviewModel } from "./model-review-activity";
 import { isAuthenticatedRoleMw } from "@src/core/middlewares/is-authenticated-role-mw";
 import { activitiesModel } from "@src/modules/activities/model-activities";
 import { activitiesOnCategoryModel } from "@src/modules/activities/model-activities-on-category";
+import { getCurrentSemesterString } from "@src/core/utils/etc";
 
 const bodySchema = z.object({
   activityId: z.string().default(""),
@@ -65,6 +66,7 @@ export const v1RegisterActivity = p.route.post({
         activityId,
         activityOnCategoryId: activityOnCategory.id,
         studentReviewId: reviewStudent.id,
+        semester: getCurrentSemesterString(),
       },
     });
 
