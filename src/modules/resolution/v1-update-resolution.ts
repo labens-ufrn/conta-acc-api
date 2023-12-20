@@ -5,6 +5,7 @@ import { resolutionModel } from "./model-resolution";
 const bodySchema = z.object({
   name: z.string().optional().nullable(),
   description: z.string().optional().nullable(),
+  totalPoints: z.number().optional().nullable(),
   link: z.string().optional().nullable(),
   isCurrent: z.boolean().optional().nullable(),
 });
@@ -14,7 +15,7 @@ export const v1UpdateResolution = p.route.put({
   path: "/:id",
   bodySchema,
   async resolver({ body, params }, ctx) {
-    const { name, description, link, isCurrent } = body;
+    const { name, description, link, isCurrent, totalPoints } = body;
     const { id } = params;
 
     const { courseId } = ctx;
@@ -51,6 +52,7 @@ export const v1UpdateResolution = p.route.put({
         description,
         link,
         isCurrent,
+        totalPoints,
       },
     });
 

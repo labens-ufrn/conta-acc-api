@@ -7,6 +7,7 @@ import { activitiesOnCategoryModel } from "../activities/model-activities-on-cat
 
 const bodySchema = z.object({
   name: z.string(),
+  totalPoints: z.number(),
   description: z.string().optional().nullable(),
   link: z.string().optional().nullable(),
   isCurrent: z.boolean().optional().nullable(),
@@ -17,7 +18,7 @@ export const v1CreateResolution = p.route.post({
   key: "createResolution",
   bodySchema,
   async resolver({ body }, ctx) {
-    const { name, description, link, isCurrent, copyFrom } = body;
+    const { name, description, link, isCurrent, copyFrom, totalPoints } = body;
 
     const { courseId } = ctx;
 
@@ -50,6 +51,7 @@ export const v1CreateResolution = p.route.post({
         description,
         link,
         isCurrent,
+        totalPoints,
         course: {
           connect: {
             id: courseId,
