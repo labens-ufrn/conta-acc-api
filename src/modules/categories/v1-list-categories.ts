@@ -4,6 +4,7 @@ import { Prisma } from "@prisma/client";
 import { getInclude } from "@src/core/utils/helper-include";
 import { categoryModel } from "./model-categories";
 import { resolutionModel } from "../resolution/model-resolution";
+import { isAuthenticatedRoleMw } from "@src/core/middlewares/is-authenticated-role-mw";
 
 const querySchema = z.object({
   include: z.string().optional(),
@@ -17,6 +18,10 @@ const querySchema = z.object({
 export const v1ListCategories = p.route.get({
   key: "listCategories",
   querySchema,
+  noMw: true,
+  options: {
+    middlewares: [isAuthenticatedRoleMw(["ADMIN", "COORDINATOR", "STUDENT"])],
+  },
   async resolver({ query }, ctx) {
     let { include, page = 1, pageSize = 10, search, id, resolutionId } = query;
 

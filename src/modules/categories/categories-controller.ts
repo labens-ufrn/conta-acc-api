@@ -7,6 +7,6 @@ import { isAuthenticatedRoleMw } from "@src/core/middlewares/is-authenticated-ro
 export const categoriesController = p
   .controller()
   .withPath("/categories")
-  .withMiddlewares([isAuthenticatedRoleMw(["ADMIN", "STUDENT", "COORDINATOR"])])
+  .withMiddlewares([isAuthenticatedRoleMw(["ADMIN", "COORDINATOR"])])
   .withRoutes([v1ListCategories, v1CreateCategory, v1UpdateCategory])
   .build();

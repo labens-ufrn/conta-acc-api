@@ -11,6 +11,8 @@ import { getCurrentSemesterString } from "@src/core/utils/etc";
 
 const bodySchema = z.object({
   activityId: z.string().default(""),
+  name: z.string(),
+  link: z.string().optional().nullable(),
 });
 
 export const v1RegisterActivity = p.route.post({
@@ -22,7 +24,7 @@ export const v1RegisterActivity = p.route.post({
   },
   path: "/me/review",
   async resolver({ body }, ctx) {
-    const { activityId } = body;
+    const { activityId, link, name } = body;
     const { studentId } = ctx;
 
     const reviewStudent = await studentReviewModel.findFirst({
@@ -66,6 +68,8 @@ export const v1RegisterActivity = p.route.post({
         activityId,
         activityOnCategoryId: activityOnCategory.id,
         studentReviewId: reviewStudent.id,
+        link,
+        name,
         semester: getCurrentSemesterString(),
       },
     });

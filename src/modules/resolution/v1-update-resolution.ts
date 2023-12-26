@@ -1,6 +1,7 @@
 import p from "pomme-ts";
 import { z } from "zod";
 import { resolutionModel } from "./model-resolution";
+import { studentReviewModel } from "../student/review/model-student-review";
 
 const bodySchema = z.object({
   name: z.string().optional().nullable(),
@@ -39,6 +40,17 @@ export const v1UpdateResolution = p.route.put({
         },
         data: {
           isCurrent: false,
+        },
+      });
+
+      await studentReviewModel.updateMany({
+        where: {
+          student: {
+            courseId,
+          },
+        },
+        data: {
+          resolutionId: id,
         },
       });
     }

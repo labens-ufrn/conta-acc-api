@@ -7,6 +7,6 @@ import { isAuthenticatedRoleMw } from "@src/core/middlewares/is-authenticated-ro
 export const resolutionController = p
   .controller()
   .withPath("/resolution")
-  .withMiddlewares([isAuthenticatedRoleMw(["ADMIN", "STUDENT", "COORDINATOR"])])
+  .withMiddlewares([isAuthenticatedRoleMw(["ADMIN", "COORDINATOR"])])
   .withRoutes([v1ListResolution, v1CreateResolution, v1UpdateResolution])
   .build();

@@ -4,6 +4,7 @@ import { courseModel } from "../course/model-course";
 import { resolutionModel } from "./model-resolution";
 import { categoryModel } from "../categories/model-categories";
 import { activitiesOnCategoryModel } from "../activities/model-activities-on-category";
+import { studentReviewModel } from "../student/review/model-student-review";
 
 const bodySchema = z.object({
   name: z.string(),
@@ -59,6 +60,19 @@ export const v1CreateResolution = p.route.post({
         },
       },
     });
+
+    if (isCurrent) {
+      await studentReviewModel.updateMany({
+        where: {
+          student: {
+            courseId,
+          },
+        },
+        data: {
+          resolutionId: resolution.id,
+        },
+      });
+    }
 
     let errors = [];
 

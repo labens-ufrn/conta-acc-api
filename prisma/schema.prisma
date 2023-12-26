@@ -163,6 +163,8 @@ model Student {
 model StudentReview {
   id String @id @default(cuid())
 
+  status Status @default(ACTIVE)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   metaData  Json?
@@ -213,4 +215,10 @@ enum Role {
   ADMIN
   COORDINATOR
   STUDENT
+}
+
+enum ReviewStatus {
+  INPROGRESS
+  APPROVED
+  REJECTED
 }

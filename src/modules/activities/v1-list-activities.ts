@@ -5,6 +5,7 @@ import { getInclude } from "@src/core/utils/helper-include";
 import { activitiesModel } from "./model-activities";
 import { categoryModel } from "../categories/model-categories";
 import { activitiesOnCategoryModel } from "./model-activities-on-category";
+import { isAuthenticatedRoleMw } from "@src/core/middlewares/is-authenticated-role-mw";
 
 const querySchema = z.object({
   include: z.string().optional(),
@@ -17,6 +18,9 @@ export const v1ListActivities = p.route.get({
   key: "listActivities",
   path: "/:categoryId",
   querySchema,
+  options: {
+    middlewares: [isAuthenticatedRoleMw(["ADMIN", "COORDINATOR", "STUDENT"])],
+  },
   async resolver({ query, params }, ctx) {
     let { include, page = 1, pageSize = 10, search } = query;
     const { categoryId } = params;
