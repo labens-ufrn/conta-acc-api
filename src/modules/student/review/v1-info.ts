@@ -78,6 +78,7 @@ export const v1InfoActivities = p.route.get({
           INNER JOIN "activitiesOnCategories" aoc ON aoc.id = ra."activityOnCategoryId"
         WHERE
           ra."studentReviewId" = ${reviewStudent.id}
+          AND ra.status != 'REJECTED'
         GROUP BY
           ra.semester,
           aoc.id

@@ -8,7 +8,7 @@ import { studentModel } from "../model-student";
 const bodySchema = z.object({
   name: z.string().optional().nullable(),
   link: z.string().optional().nullable(),
-  status: z.enum([" APPROVED", "REJECTED"]).optional().nullable(),
+  status: z.enum(["APPROVED", "REJECTED"]).optional().nullable(),
 });
 
 export const v1UpdateReview = p.route.put({
