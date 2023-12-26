@@ -1,11 +1,12 @@
 import p from "pomme-ts";
-import { v1ListStudent } from "./list-student";
+import { v1ListStudent } from "./v1-list-student";
 import { isAuthenticatedRoleMw } from "@src/core/middlewares/is-authenticated-role-mw";
 import { v1CreateStudent } from "./v1-create-student";
 import { v1UpdateStudent } from "./v1-update-student";
 import { v1ListReviewActivities } from "./review/v1-list-review";
 import { v1RegisterActivity } from "./review/v1-register-review";
 import { v1InfoActivities } from "./review/v1-info";
+import { v1UpdateReview } from "./review/v1-update-review";
 
 export const studentController = p
   .controller()
@@ -18,5 +19,6 @@ export const studentController = p
     v1ListReviewActivities,
     v1RegisterActivity,
     v1InfoActivities,
+    v1UpdateReview,
   ])
   .build();

@@ -1,7 +1,5 @@
 import p from "pomme-ts";
 import { z } from "zod";
-import { Prisma } from "@prisma/client";
-import { getInclude } from "@src/core/utils/helper-include";
 import { studentReviewModel } from "./model-student-review";
 import { reviewModel } from "./model-review-activity";
 import { isAuthenticatedRoleMw } from "@src/core/middlewares/is-authenticated-role-mw";
@@ -16,13 +14,13 @@ const bodySchema = z.object({
 });
 
 export const v1RegisterActivity = p.route.post({
-  key: "registerActivity",
+  key: "newActivity",
   bodySchema,
   noMw: true,
   options: {
     middlewares: [isAuthenticatedRoleMw(["STUDENT"])],
   },
-  path: "/me/review",
+  path: "/activities",
   async resolver({ body }, ctx) {
     const { activityId, link, name } = body;
     const { studentId } = ctx;

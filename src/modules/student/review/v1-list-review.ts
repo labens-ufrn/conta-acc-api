@@ -5,12 +5,14 @@ import { getInclude } from "@src/core/utils/helper-include";
 import { studentReviewModel } from "./model-student-review";
 import { reviewModel } from "./model-review-activity";
 import { isAuthenticatedRoleMw } from "@src/core/middlewares/is-authenticated-role-mw";
+import { studentModel } from "../model-student";
 
 const querySchema = z.object({
   include: z.string().optional(),
   search: z.string().optional(),
   page: z.number().default(1),
   pageSize: z.number().default(10),
+  studentId: z.string().optional().nullable(),
 });
 
 export const v1ListReviewActivities = p.route.get({
@@ -18,13 +20,32 @@ export const v1ListReviewActivities = p.route.get({
   querySchema,
   noMw: true,
   options: {
-    middlewares: [isAuthenticatedRoleMw(["STUDENT"])],
+    middlewares: [isAuthenticatedRoleMw(["STUDENT", "COORDINATOR"])],
   },
-  path: "/me/review",
+  path: "/activities",
   async resolver({ query }, ctx) {
-    let { include, page = 1, pageSize = 10, search } = query;
+    let { include, page = 1, pageSize = 10, search, studentId } = query;
 
-    const { courseId, studentId } = ctx;
+    const { courseId, user, student } = ctx;
+
+    if (user.role === "STUDENT") {
+      studentId = ctx.studentId;
+    } else if (user.role === "COORDINATOR") {
+      if (!studentId) {
+        p.error.badRequest("StudentId is required");
+      }
+
+      const student = await studentModel.findFirst({
+        where: {
+          id: studentId,
+          courseId,
+        },
+      });
+
+      if (!student) {
+        p.error.badRequest("Student not found");
+      }
+    }
 
     const offset = (page - 1) * pageSize;
 

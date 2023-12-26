@@ -3,24 +3,45 @@ import { z } from "zod";
 import { Prisma } from "@prisma/client";
 import { getInclude } from "@src/core/utils/helper-include";
 import { studentReviewModel } from "./model-student-review";
-import { reviewModel } from "./model-review-activity";
 import { isAuthenticatedRoleMw } from "@src/core/middlewares/is-authenticated-role-mw";
-import { resolutionModel } from "@src/modules/resolution/model-resolution";
 import { prismaClient } from "@src/core/db/prisma";
-import { activitiesModel } from "@src/modules/activities/model-activities";
 import { activitiesOnCategoryModel } from "@src/modules/activities/model-activities-on-category";
+
+const querySchema = z.object({
+  studentId: z.string().optional().nullable(),
+});
 
 export const v1InfoActivities = p.route.get({
   key: "infoActivities",
   noMw: true,
+  querySchema,
   options: {
-    middlewares: [isAuthenticatedRoleMw(["STUDENT"])],
+    middlewares: [isAuthenticatedRoleMw(["STUDENT", "COORDINATOR"])],
   },
-  path: "/me/info",
+  path: "/info",
   async resolver({ query }, ctx) {
-    let { include, page = 1, pageSize = 10, search } = query;
+    let { studentId } = query;
 
-    const { courseId, studentId } = ctx;
+    const { courseId, user } = ctx;
+
+    if (user.role === "STUDENT") {
+      studentId = ctx.studentId;
+    } else if (user.role === "COORDINATOR") {
+      if (!studentId) {
+        p.error.badRequest("StudentId is required");
+      }
+
+      const student = await prismaClient.student.findFirst({
+        where: {
+          id: studentId,
+          courseId,
+        },
+      });
+
+      if (!student) {
+        p.error.badRequest("Student not found");
+      }
+    }
 
     const reviewStudent = await studentReviewModel.findFirst({
       where: {
