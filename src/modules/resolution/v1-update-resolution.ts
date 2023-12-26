@@ -2,6 +2,7 @@ import p from "pomme-ts";
 import { z } from "zod";
 import { resolutionModel } from "./model-resolution";
 import { studentReviewModel } from "../student/review/model-student-review";
+import { reviewModel } from "../student/review/model-review-activity";
 
 const bodySchema = z.object({
   name: z.string().optional().nullable(),

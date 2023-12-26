@@ -11,6 +11,7 @@ const bodySchema = z.object({
   activityId: z.string().default(""),
   name: z.string(),
   link: z.string().optional().nullable(),
+  value: z.number().optional().nullable(),
 });
 
 export const v1RegisterActivity = p.route.post({
@@ -22,7 +23,7 @@ export const v1RegisterActivity = p.route.post({
   },
   path: "/activities",
   async resolver({ body }, ctx) {
-    const { activityId, link, name } = body;
+    const { activityId, link, name, value } = body;
     const { studentId } = ctx;
 
     const reviewStudent = await studentReviewModel.findFirst({
@@ -61,11 +62,17 @@ export const v1RegisterActivity = p.route.post({
       },
     });
 
+    if (!activityOnCategory) {
+      p.error.badRequest("Activity not found");
+    }
+
     const activity = await reviewModel.create({
       data: {
         activityId,
         activityOnCategoryId: activityOnCategory.id,
         studentReviewId: reviewStudent.id,
+        ...(value &&
+          activityOnCategory.workloadInput && { inputPoints: value }),
         link,
         name,
         semester: getCurrentSemesterString(),

@@ -1,11 +1,13 @@
 import p from "pomme-ts";
-import { z } from "zod";
+import { map, z } from "zod";
 import { Prisma } from "@prisma/client";
 import { getInclude } from "@src/core/utils/helper-include";
 import { studentReviewModel } from "./model-student-review";
 import { isAuthenticatedRoleMw } from "@src/core/middlewares/is-authenticated-role-mw";
 import { prismaClient } from "@src/core/db/prisma";
 import { activitiesOnCategoryModel } from "@src/modules/activities/model-activities-on-category";
+import { categoryModel } from "@src/modules/categories/model-categories";
+import { reviewModel } from "./model-review-activity";
 
 const querySchema = z.object({
   studentId: z.string().optional().nullable(),
@@ -91,6 +93,18 @@ export const v1InfoActivities = p.route.get({
           in: [...new Set(values.map((v) => v.id))],
         },
       },
+      include: {
+        category: true,
+      },
+    });
+
+    const activitiesWithInput = await reviewModel.findMany({
+      where: {
+        studentReviewId: reviewStudent.id,
+        activityOnCategory: {
+          workloadInput: true,
+        },
+      },
     });
 
     const mappedValues = values.map((v) => {
@@ -114,15 +128,49 @@ export const v1InfoActivities = p.route.get({
       return acc;
     }, {});
 
-    const sumOfPoints = values.reduce((acc, item) => {
-      return acc + item.points;
+    const groupedData = mappedValues.reduce((acc, item) => {
+      const categoryId = item.categoryId;
+
+      if (!acc[categoryId]) {
+        acc[categoryId] = {
+          categoryId: categoryId,
+          totalPointsOfSemester: 0,
+        };
+      }
+
+      acc[categoryId].totalPointsOfSemester += item.totalPointsOfSemester;
+
+      return acc;
+    }, {});
+
+    const resultArray: any[] = Object.values(groupedData);
+
+    const sumMapped = resultArray.reduce((acc, item) => {
+      const { category } = allActivities.find(
+        (a) => a.categoryId === item.categoryId
+      );
+
+      if (category.maxPoints !== null) {
+        item.totalPointsOfSemester = Math.min(
+          item.totalPointsOfSemester,
+          category.maxPoints
+        );
+      }
+
+      return acc + item.totalPointsOfSemester;
     }, 0);
+
+    const sumOfInputs = activitiesWithInput.reduce((acc, item) => {
+      return acc + (item.inputPoints || 0);
+    }, 0);
+
+    const sum = sumMapped + sumOfInputs;
 
     return {
       resolution: reviewStudent.resolution,
       semesters: result,
-      sumOfPoints,
-      isConcluded: sumOfPoints >= reviewStudent.resolution.totalPoints,
+      sumOfPoints: sum,
+      isConcluded: sum >= reviewStudent.resolution.totalPoints,
     };
   },
 });

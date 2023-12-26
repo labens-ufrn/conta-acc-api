@@ -2,12 +2,11 @@ import p from "pomme-ts";
 
 import { isAuthenticatedRoleMw } from "@src/core/middlewares/is-authenticated-role-mw";
 import { reviewModel } from "./model-review-activity";
-import { studentModel } from "../model-student";
 import { courseModel } from "@src/modules/course/model-course";
 
 export const v1DeleteActivityStudent = p.route.delete({
   key: "deleteActivityStudent",
-  path: "/:id",
+  path: "/activities/:id",
   noMw: true,
   options: {
     middlewares: [isAuthenticatedRoleMw(["STUDENT", "COORDINATOR"])],
@@ -46,17 +45,6 @@ export const v1DeleteActivityStudent = p.route.delete({
 
     if (!courseFound) {
       p.error.badRequest("Course not found");
-    }
-
-    const studentFound = await studentModel.findUnique({
-      where: {
-        id,
-        courseId,
-      },
-    });
-
-    if (!studentFound) {
-      p.error.badRequest("Student not found");
     }
 
     const reviewFound = await reviewModel.findFirst({
