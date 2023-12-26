@@ -7,6 +7,6 @@ import { isAuthenticatedRoleMw } from "@src/core/middlewares/is-authenticated-ro
 export const activitiesController = p
   .controller()
   .withPath("/activities")
-  .withMiddlewares([isAuthenticatedRoleMw(["COORDINATOR"])])
+  .withMiddlewares([isAuthenticatedRoleMw(["COORDINATOR", "ADMIN"])])
   .withRoutes([v1ListActivities, v1CreateActivity, v1UpdateActivity])
   .build();

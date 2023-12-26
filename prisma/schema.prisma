@@ -96,6 +96,7 @@ model ActivitiesOnCategory {
 
   workloadSemester Int?
   workloadActivity Int?
+  workloadInput    Boolean? @default(false)
 
   categoryId String
   category   Categories @relation(fields: [categoryId], references: [id])
@@ -187,6 +188,8 @@ model ReviewActivity {
   link String?
 
   semester String?
+
+  inputPoints Int?
 
   status ReviewStatus @default(INPROGRESS)
 

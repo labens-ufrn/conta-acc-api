@@ -10,6 +10,7 @@ const bodySchema = z.object({
   workloadSemester: z.number().optional().nullable(),
   workloadActivity: z.number().optional().nullable(),
   description: z.string().optional().nullable(),
+  workloadInput: z.boolean().optional().nullable().default(false),
   categoryId: z.string(),
 });
 
@@ -24,6 +25,7 @@ export const v1CreateActivity = p.route.post({
       description,
       workloadActivity,
       workloadSemester,
+      workloadInput,
     } = body;
 
     const categoryFoiund = await categoryModel.findUnique({
@@ -36,7 +38,7 @@ export const v1CreateActivity = p.route.post({
       p.error.badRequest("Category not found");
     }
 
-    if (!workloadActivity && !workloadSemester) {
+    if (!workloadInput && !workloadActivity && !workloadSemester) {
       p.error.badRequest(
         "You must provide workloadActivity or workloadSemester"
       );
@@ -57,6 +59,7 @@ export const v1CreateActivity = p.route.post({
         description,
         workloadActivity,
         workloadSemester,
+        workloadInput,
         categoryId,
         activityId: activityCreated.id,
       },

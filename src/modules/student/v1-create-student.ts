@@ -3,6 +3,7 @@ import { z } from "zod";
 import { userModel } from "../user/model-user";
 import { studentModel } from "./model-student";
 import { studentReviewModel } from "./review/model-student-review";
+import { resolutionModel } from "../resolution/model-resolution";
 
 const bodySchema = z.object({
   name: z.string(),
@@ -61,6 +62,17 @@ export const v1CreateStudent = p.route.post({
       },
     });
 
+    const resolution = await resolutionModel.findFirst({
+      where: {
+        courseId,
+        isCurrent: true,
+      },
+    });
+
+    if (!resolution) {
+      p.error.serverError("Resolution not found");
+    }
+
     if (!student) {
       p.error.serverError("Error creating student");
     }
@@ -68,7 +80,7 @@ export const v1CreateStudent = p.route.post({
     await studentReviewModel.create({
       data: {
         studentId: student.id,
-        resolutionId: null,
+        resolutionId: resolution.id,
       },
     });
 

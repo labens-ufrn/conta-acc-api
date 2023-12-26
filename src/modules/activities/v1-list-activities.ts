@@ -18,6 +18,7 @@ export const v1ListActivities = p.route.get({
   key: "listActivities",
   path: "/:categoryId",
   querySchema,
+  noMw: true,
   options: {
     middlewares: [isAuthenticatedRoleMw(["ADMIN", "COORDINATOR", "STUDENT"])],
   },

@@ -1,6 +1,5 @@
 import p from "pomme-ts";
 import { z } from "zod";
-import { activitiesModel } from "./model-activities";
 import { activitiesOnCategoryModel } from "./model-activities-on-category";
 
 const bodySchema = z.object({
@@ -8,6 +7,7 @@ const bodySchema = z.object({
   code: z.string().optional().nullable(),
   workloadSemester: z.number().optional().nullable(),
   workloadActivity: z.number().optional().nullable(),
+  workloadInput: z.boolean().optional().nullable(),
   description: z.string().optional().nullable(),
 });
 
@@ -16,8 +16,14 @@ export const v1UpdateActivity = p.route.put({
   path: "/:activityId",
   bodySchema,
   async resolver({ body }, ctx) {
-    const { name, code, description, workloadActivity, workloadSemester } =
-      body;
+    const {
+      name,
+      code,
+      description,
+      workloadActivity,
+      workloadSemester,
+      workloadInput,
+    } = body;
 
     const { activityId } = ctx.params;
 
@@ -31,7 +37,7 @@ export const v1UpdateActivity = p.route.put({
       p.error.badRequest("Activity not found");
     }
 
-    if (!workloadActivity && !workloadSemester) {
+    if (!workloadInput && !workloadActivity && !workloadSemester) {
       p.error.badRequest(
         "You must provide workloadActivity or workloadSemester"
       );
