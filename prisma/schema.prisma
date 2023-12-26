@@ -37,7 +37,7 @@ model Course {
   updatedAt    DateTime     @updatedAt
   metaData     Json?
   resolutions  Resolution[]
-  department   Departament  @relation(fields: [departmentId], references: [id])
+  department   Departament  @relation(fields: [departmentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   departmentId String
 
   @@map("courses")
@@ -57,7 +57,7 @@ model Resolution {
   updatedAt     DateTime        @updatedAt
   metaData      Json?
   courseId      String
-  course        Course          @relation(fields: [courseId], references: [id])
+  course        Course          @relation(fields: [courseId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   categories    Categories[]
   StudentReview StudentReview[]
 
@@ -78,7 +78,7 @@ model Categories {
   metaData  Json?
 
   resolutionId String
-  resolution   Resolution             @relation(fields: [resolutionId], references: [id])
+  resolution   Resolution             @relation(fields: [resolutionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   activities   ActivitiesOnCategory[]
 
   @@map("categories")
@@ -99,10 +99,10 @@ model ActivitiesOnCategory {
   workloadInput    Boolean? @default(false)
 
   categoryId String
-  category   Categories @relation(fields: [categoryId], references: [id])
+  category   Categories @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   activityId     String
-  activity       Activities       @relation(fields: [activityId], references: [id])
+  activity       Activities       @relation(fields: [activityId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   ReviewActivity ReviewActivity[]
 
   @@map("activitiesOnCategories")
@@ -135,7 +135,7 @@ model User {
   lastLogin DateTime @default(now())
   metaData  Json?
 
-  course   Course?  @relation(fields: [courseId], references: [id])
+  course   Course?  @relation(fields: [courseId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   courseId String?
   student  Student?
 
@@ -151,10 +151,10 @@ model Student {
   updatedAt DateTime @updatedAt
   metaData  Json?
 
-  user   User?  @relation(fields: [userId], references: [id])
+  user   User?  @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId String @unique
 
-  course   Course?        @relation(fields: [courseId], references: [id])
+  course   Course?        @relation(fields: [courseId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   courseId String?
   review   StudentReview?
 
@@ -171,10 +171,10 @@ model StudentReview {
   metaData  Json?
 
   studentId String  @unique
-  student   Student @relation(fields: [studentId], references: [id])
+  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   resolutionId String?
-  resolution   Resolution? @relation(fields: [resolutionId], references: [id])
+  resolution   Resolution? @relation(fields: [resolutionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   reviewActivity ReviewActivity[]
 
@@ -198,13 +198,13 @@ model ReviewActivity {
   metaData  Json?
 
   studentReviewId String
-  studentReview   StudentReview @relation(fields: [studentReviewId], references: [id])
+  studentReview   StudentReview @relation(fields: [studentReviewId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   activityId String
-  activity   Activities @relation(fields: [activityId], references: [id])
+  activity   Activities @relation(fields: [activityId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   activityOnCategoryId String
-  activityOnCategory   ActivitiesOnCategory @relation(fields: [activityOnCategoryId], references: [id])
+  activityOnCategory   ActivitiesOnCategory @relation(fields: [activityOnCategoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@map("reviewActivities")
 }

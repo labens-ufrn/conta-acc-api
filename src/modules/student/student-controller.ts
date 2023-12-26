@@ -7,6 +7,7 @@ import { v1ListReviewActivities } from "./review/v1-list-review";
 import { v1RegisterActivity } from "./review/v1-register-review";
 import { v1InfoActivities } from "./review/v1-info";
 import { v1UpdateReview } from "./review/v1-update-review";
+import { v1DeleteActivityStudent } from "./review/v1-delete-student";
 
 export const studentController = p
   .controller()
@@ -20,5 +21,6 @@ export const studentController = p
     v1RegisterActivity,
     v1InfoActivities,
     v1UpdateReview,
+    v1DeleteActivityStudent,
   ])
   .build();

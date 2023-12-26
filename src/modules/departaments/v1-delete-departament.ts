@@ -1,36 +1,32 @@
 import { isAuthenticatedRoleMw } from "@src/core/middlewares/is-authenticated-role-mw";
 import p from "pomme-ts";
+import { departmentModel } from "./model-departament";
 
-import { userModel } from "./model-user";
-
-export const v1DeleteUser = p.route.delete({
-  key: "userCourse",
+export const v1DeleteDepartament = p.route.delete({
+  key: "deleteDepartament",
   path: "/:id",
-  noMw: true,
   options: {
     middlewares: [isAuthenticatedRoleMw("SYSADMIN")],
   },
   async resolver(input, ctx) {
     const { id } = input.params;
 
-    //todo check auth
-
-    const userFound = await userModel.findUnique({
+    const departmentFound = await departmentModel.findUnique({
       where: {
         id,
       },
     });
 
-    if (!userFound) {
-      p.error.badRequest("User not found");
+    if (!departmentFound) {
+      p.error.badRequest("Department not found");
     }
 
-    const user = await userModel.delete({
+    const department = await departmentModel.delete({
       where: {
         id,
       },
     });
 
-    return user;
+    return department;
   },
 });

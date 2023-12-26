@@ -1,10 +1,9 @@
 import { isAuthenticatedRoleMw } from "@src/core/middlewares/is-authenticated-role-mw";
 import p from "pomme-ts";
+import { courseModel } from "./model-course";
 
-import { userModel } from "./model-user";
-
-export const v1DeleteUser = p.route.delete({
-  key: "userCourse",
+export const v1DeleteCourse = p.route.delete({
+  key: "deleteCourse",
   path: "/:id",
   noMw: true,
   options: {
@@ -13,24 +12,22 @@ export const v1DeleteUser = p.route.delete({
   async resolver(input, ctx) {
     const { id } = input.params;
 
-    //todo check auth
-
-    const userFound = await userModel.findUnique({
+    const courseFound = await courseModel.findUnique({
       where: {
         id,
       },
     });
 
-    if (!userFound) {
-      p.error.badRequest("User not found");
+    if (!courseFound) {
+      p.error.badRequest("Course not found");
     }
 
-    const user = await userModel.delete({
+    const course = await courseModel.delete({
       where: {
         id,
       },
     });
 
-    return user;
+    return course;
   },
 });
